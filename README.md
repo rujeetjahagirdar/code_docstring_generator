@@ -1,6 +1,6 @@
-# 📝 Python Function Docstring Generator
+# 📝 Code Docstring Generator
 
-This project is a **Python Function Docstring Generator** that takes Python code as input and generates docstrings for the functions in the code using **Large Language Models (LLM)**. It is built with a **Flask** backend, utilizes **OpenAI's GPT model** for natural language generation, and demonstrates skills in backend development, Python programming, frontend integration, and modern **LLMs**.
+This project is a **Code Docstring Generator** that takes Python code as input and generates docstrings for the functions in the code using **Large Language Models (LLM)**. It is built with a **Flask** backend, utilizes **OpenAI's GPT model** for natural language generation, and demonstrates skills in backend development, Python programming, frontend integration, and modern **LLMs**.
 
 ## 🚀 Features
 
