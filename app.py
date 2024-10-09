@@ -4,11 +4,7 @@ import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from openai import OpenAI
-# Load model directly
-from transformers import T5Tokenizer, T5ForConditionalGeneration
-import torch
 
-from holoviews.operation import method
 
 app = Flask(__name__)
 CORS(app)
