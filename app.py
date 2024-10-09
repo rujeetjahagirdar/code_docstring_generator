@@ -16,10 +16,6 @@ api_key = os.getenv('OPENAI_API_KEY'),
 )
 
 
-@app.route('/')
-def hello_world():  # put application's code here
-    return 'Hello World!@@@@'
-
 
 def parse_code_snippet(code_data):
     function_list = []
