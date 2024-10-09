@@ -24,9 +24,9 @@ def parse_code_snippet(code_data):
         if(isinstance(node, ast.FunctionDef)):
             f_name = node.name
             f_code = ast.get_source_segment(code_data, node)
-            print("Function name= ",f_name)
+            # print("Function name= ",f_name)
             # print(node.body)
-            print("Function code= ",f_code)
+            # print("Function code= ",f_code)
             function_list[f_name] = f_code
     return function_list
 
@@ -38,29 +38,34 @@ def generate_docstring(fun_name, fun_code):
             {"role" : "user",
              "content":prompt},
         ],
-        model = 'gpt-4o-mini-2024-07-18',
+        model = 'gpt-4-turbo',
         temperature=0.7,
         top_p=1,
-        presence_penalty=0.5
+        presence_penalty=0.3
     )
 
     docStr = response.choices[0].message.content
-    print(docStr)
+    # print(docStr)
     return docStr
 
 
 @app.route('/generate_doc', methods=['POST'])
 def generate_doc():
     # code_data = request.json.get('code')
-    print("inside gene")
+    # print("inside gene")
     code_file = request.files['code_file']
     code_data = code_file.read().decode('utf-8')
     functions = parse_code_snippet(code_data)
-    print("functions= ", functions)
+    # print("functions= ", functions)
     doc_string = {}
     for f_name, f_code in enumerate(functions):
         doc_string[f_name] = generate_docstring(f_name, f_code)
-    print("doc_string= ",doc_string)
+    
+    for i in doc_string:
+        print(i)
+        print(doc_string[i])
+        print("##############")
+
     return jsonify({"docstrings": doc_string})
 
 if __name__ == '__main__':
