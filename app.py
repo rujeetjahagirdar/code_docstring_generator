@@ -1,7 +1,7 @@
 import ast
 import os
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from openai import OpenAI
 
@@ -13,7 +13,9 @@ client = OpenAI(
 api_key = os.getenv('OPENAI_API_KEY'),
 )
 
-
+@app.route('/')
+def home():
+    return render_template('index.html')
 
 def parse_code_snippet(code_data):
     function_list = {}
