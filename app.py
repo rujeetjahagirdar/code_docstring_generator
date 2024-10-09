@@ -33,18 +33,17 @@ def parse_code_snippet(code_data):
     return function_list
 
 def generate_docstring(fun_name, fun_code):
-    prompt = f'Analyze the following function and Generate a detailed Python docstring based on what is the input to the\
-     function, what it is doing and what is the output \
-    for the following function:"\n\n{fun_name}\n{fun_code}". Do not add your comments just \
-    give the docstring such that i can directly process the response.'
+    prompt = f'Analyze the following function and Generate a detailed Python docstring based on what is the input to the function, what it is doing and what is the output for the following function:"\n\n{fun_name}\n{fun_code}". Do not add your comments just give the docstring such that i can directly process the response.'
 
-    response = client.beta.chat.completions.parse(
+    response = client.chat.completions.create(
         messages= [
             {"role" : "user",
              "content":prompt},
         ],
-        model = 'gpt-4o-mini',
-        # response_format=similar
+        model = 'gpt-4o-mini-2024-07-18',
+        temperature=0.7,
+        top_p=1,
+        presence_penalty=0.5
     )
 
     docStr = response.choices[0].message.content
