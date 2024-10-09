@@ -12,8 +12,11 @@ This project is a **Python Function Docstring Generator** that takes Python code
 
 ## 📂 Project Structure
 . 
+
 ├── app.py # Main Flask application 
+
 ├── requirements.txt # Dependencies for the project 
+
 └── README.md # Project documentation (this file)
 
 
