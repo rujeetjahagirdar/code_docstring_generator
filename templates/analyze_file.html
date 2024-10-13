@@ -22,9 +22,32 @@
         input[type="file"] {
             margin-bottom: 10px;
         }
+        .result-container {
+            display: flex;
+            gap: 20px;
+            flex-direction: row;
+        }
+        .textarea-wrapper {
+            flex: 1; /* Make each textarea take equal space */
+        }
+
         textarea {
-            width: 100%;
-            height: 200px;
+            width: 80%;
+            height: 300px;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        #issues-text {
+            width: 70%;
+            height: 150px;
             margin-top: 20px;
             padding: 10px;
             border: 1px solid #ccc;
@@ -43,19 +66,51 @@
         button:hover {
             background-color: #218838;
         }
+
+        /* Basic spinner */
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -25px;
+            margin-left: -25px;
+            z-index: 1000; /* Ensures it is above other content */
+        }
+
+        /* Animation for spinner */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
-<body>
 
 <h1>Python Code Analyzer</h1>
 <form id="upload-form">
     <input type="file" id="file-input" accept=".py" required>
     <button type="submit">Analyze Code</button>
 </form>
+<div id="loading-spinner" class="spinner" style="display: none;"></div>
+<h2>Issues in Code:</h2>
+<textarea id="issues-text" readonly></textarea>
 
 <h2>Suggested Code Changes:</h2>
-<textarea id="output-textarea2" readonly></textarea>
-
+    <div class="result-container">
+        <div class="textarea-wrapper">
+            <label for="textarea1">Original Code</label>
+            <textarea id="textarea1" readonly></textarea>
+        </div>
+        <div class="textarea-wrapper">
+            <label for="textarea2">Suggested Changes</label>
+            <textarea id="textarea2" readonly></textarea>
+        </div>
+    </div>
 <script>
     document.getElementById('upload-form').addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent default form submission
@@ -63,7 +118,7 @@
         const fileInput = document.getElementById('file-input');
         const formData = new FormData();
         formData.append('code_file', fileInput.files[0]);
-
+        document.getElementById('loading-spinner').style.display = 'block';
         // Send the file to the backend
         fetch('http://127.0.0.1:5000/analyze_file', {
             method: 'POST',
@@ -72,10 +127,18 @@
         .then(response => response.json())
         .then(data => {
             // Display the generated docstring in the textarea
+            document.getElementById('loading-spinner').style.display = 'none';
             console.log(data)
-            let docstrings = data.result;
-            console.log(docstrings)
-            document.getElementById('output-textarea2').value = docstrings;
+            console.log(data.issues)
+            let issue = '';
+            data.issues.forEach((description, index) => {
+                issue += `${index + 1}. ${description}\n`;  // Adding 1 to make it human-readable (1-based index)
+            });
+            console.log(data.original)
+            console.log(data.result)
+            document.getElementById('issues-text').value = issue;
+            document.getElementById('textarea1').value = data.original;
+            document.getElementById('textarea2').value = data.result;
         })
         .catch(error => {
             console.error('Error:', error);
