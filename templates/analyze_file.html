@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Documentation Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input[type="file"] {
+            margin-bottom: 10px;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Python Code Analyzer</h1>
+<form id="upload-form">
+    <input type="file" id="file-input" accept=".py" required>
+    <button type="submit">Analyze Code</button>
+</form>
+
+<h2>Suggested Code Changes:</h2>
+<textarea id="output-textarea2" readonly></textarea>
+
+<script>
+    document.getElementById('upload-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        const fileInput = document.getElementById('file-input');
+        const formData = new FormData();
+        formData.append('code_file', fileInput.files[0]);
+
+        // Send the file to the backend
+        fetch('http://127.0.0.1:5000/analyze_file', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Display the generated docstring in the textarea
+            console.log(data)
+            let docstrings = data.result;
+            console.log(docstrings)
+            document.getElementById('output-textarea2').value = docstrings;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+</script>
+
+</body>
+</html>
